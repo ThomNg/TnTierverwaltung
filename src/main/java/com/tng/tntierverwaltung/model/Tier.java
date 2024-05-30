@@ -1,4 +1,4 @@
-package com.tng.model;
+package com.tng.tntierverwaltung.model;
 
 public class Tier {
     //region Konstanten
@@ -19,7 +19,6 @@ public class Tier {
         this.farbe = farbe;
     }
     //endregion
-
 
     //region Methoden
     public String getTierart() {
