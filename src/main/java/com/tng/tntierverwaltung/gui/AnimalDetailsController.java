@@ -1,5 +1,6 @@
 package com.tng.tntierverwaltung.gui;
 
+import com.tng.tntierverwaltung.logic.TierManager;
 import com.tng.tntierverwaltung.model.Tier;
 import com.tng.tntierverwaltung.test.TestData;
 import javafx.event.ActionEvent;
@@ -34,15 +35,16 @@ public class AnimalDetailsController {
 
     //region Methoden
     public void onVermitteltBtn(ActionEvent actionEvent) {
-        //TODO the main list still get data from TestData
+
         if(selectedTier != null){
-            List<Tier> listAnimals = TestData.getTier();
-            listAnimals.remove(selectedTier);
+            TierManager.getInstance().getTiers().remove(selectedTier);
+            errorLabel.setText("Tier is vermittelt!");
             cleanUp();
+            SceneManager.getInstance().switchScene("AnimalOverview.fxml");
         }
     }
     public void onSpeichernBtn(ActionEvent actionEvent) {
-        //TODO the main list still get data from TestData
+
         try {
             if(tierartField.getText().isEmpty() || nameField.getText().isEmpty() || alterField.getText().isEmpty() || farbeField.getText().isEmpty()) {
                 errorLabel.setText(String.format("Üngultige Eingaben!%n" +
@@ -51,8 +53,9 @@ public class AnimalDetailsController {
                         "%ndarf nicht leer"));
                 cleanUp();
             }else {
-                List<Tier> listAnimal = TestData.getTier();
-                listAnimal.add(new Tier(tierartField.getText(), nameField.getText(), Integer.parseInt(alterField.getText()), farbeField.getText()));
+                Tier addedTier = new Tier(tierartField.getText(), nameField.getText(), Integer.parseInt(alterField.getText()), farbeField.getText());
+                TierManager.getInstance().getTiers().add(addedTier);
+                errorLabel.setText("Tier ist gespeichert!");
                 SceneManager.getInstance().switchScene("AnimalOverview.fxml");
             }
         } catch (Exception e) {
