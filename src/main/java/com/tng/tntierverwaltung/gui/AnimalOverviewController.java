@@ -3,22 +3,24 @@ package com.tng.tntierverwaltung.gui;
 import com.tng.tntierverwaltung.listview.TierCellFactory;
 import com.tng.tntierverwaltung.logic.TierManager;
 import com.tng.tntierverwaltung.model.*;
-import com.tng.tntierverwaltung.test.TestData;
-import javafx.collections.FXCollections;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
-import java.util.Collections;
 import java.util.Comparator;
 
 public class AnimalOverviewController{
 
     @FXML
-    public ListView<Tier> listViewHandler;
+    private TextField searchbar;
+    // FXML private <-> public
+    @FXML
+    private ListView<Tier> listViewHandler;
 
     public void initialize(){
         // for cell
@@ -39,6 +41,9 @@ public class AnimalOverviewController{
                 goToDetailsOverviewWithSelectedTier();
             }
         });
+
+        searchbar.textProperty().addListener((observableValue, oldV, newV) ->
+                listViewHandler.setItems(TierManager.getInstance().filterBy(newV)));
     }
 
     private void goToDetailsOverviewWithSelectedTier() {
@@ -46,51 +51,28 @@ public class AnimalOverviewController{
         SceneManager.getInstance().switchToDetailWithTier(selectedTier);
     }
 
-    public void onClickTierAufnahmeBtn(ActionEvent actionEvent) {
+    @FXML
+    public void onClickTierAufnahmeBtn() {
         SceneManager.getInstance().switchToDetailWithTier(null);
     }
-
-    public void onSortTierartBtn(ActionEvent actionEvent) {
+    @FXML
+    public void onSortTierartBtn() {
         ObservableList<Tier> listTiers = TierManager.getInstance().getTiers();
-        listTiers.sort(new Comparator<Tier>() {
-            @Override
-            public int compare(Tier o1, Tier o2) {
-                return o1.getTierart().toLowerCase().compareTo(o2.getTierart().toLowerCase());
-            }
-        });
+        listTiers.sort(Comparator.comparing(o -> o.getTierart().toLowerCase()));
     }
-
-    public void onSortNameBtn(ActionEvent actionEvent) {
+    @FXML
+    public void onSortNameBtn() {
         ObservableList<Tier> listTiers = TierManager.getInstance().getTiers();
-        listTiers.sort(new Comparator<Tier>() {
-            @Override
-            public int compare(Tier o1, Tier o2) {
-                return o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
-            }
-        });
+        listTiers.sort(Comparator.comparing(o -> o.getName().toLowerCase()));
     }
-
-    public void onSortAlterBtn(ActionEvent actionEvent) {
+    @FXML
+    public void onSortAlterBtn() {
         ObservableList<Tier> listTiers = TierManager.getInstance().getTiers();
-        listTiers.sort(new Comparator<Tier>() {
-            @Override
-            public int compare(Tier o1, Tier o2) {
-                if(o1.getAlter()>o2.getAlter())
-                    return 1;
-                else
-                    return -1;
-            }
-        });
+        listTiers.sort(Comparator.comparingInt(Tier::getAlter));
     }
-
-    public void onSortFarbeBtn(ActionEvent actionEvent) {
+    @FXML
+    public void onSortFarbeBtn() {
         ObservableList<Tier> listTiers = TierManager.getInstance().getTiers();
-
-        listTiers.sort(new Comparator<Tier>() {
-            @Override
-            public int compare(Tier o1, Tier o2) {
-                return(o1.getFarbe().toLowerCase().compareTo(o2.getFarbe().toLowerCase()));
-            }
-        });
+        listTiers.sort(Comparator.comparing(o -> o.getFarbe().toLowerCase()));
     }
 }

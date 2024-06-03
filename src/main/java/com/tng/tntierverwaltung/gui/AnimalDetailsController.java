@@ -2,15 +2,16 @@ package com.tng.tntierverwaltung.gui;
 
 import com.tng.tntierverwaltung.logic.TierManager;
 import com.tng.tntierverwaltung.model.Tier;
-import com.tng.tntierverwaltung.test.TestData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
-import java.util.List;
+import java.util.Optional;
 
 public class AnimalDetailsController {
+    public Button vermitteltBtn;
+    public Button editBtn;
+    public Button speicherBtn;
     //region Konstanten
     // endregion
 
@@ -34,28 +35,53 @@ public class AnimalDetailsController {
     //endregion
 
     //region Methoden
-    public void onVermitteltBtn(ActionEvent actionEvent) {
 
-        if(selectedTier != null){
-            TierManager.getInstance().getTiers().remove(selectedTier);
+    @FXML
+    private void onVermitteltBtn(ActionEvent actionEvent) {
+        Alert vermittelnAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        vermittelnAlert.setTitle("Bestätigung");
+        vermittelnAlert.setHeaderText(String.format("%s vermitteln?%n",selectedTier));
+
+        Optional<ButtonType> optional = vermittelnAlert.showAndWait();
+
+        if(optional.isPresent() && optional.get() == ButtonType.OK){
+            TierManager.getInstance().remove(selectedTier);
             errorLabel.setText("Tier is vermittelt!");
             cleanUp();
             SceneManager.getInstance().switchScene("AnimalOverview.fxml");
         }
     }
-    public void onSpeichernBtn(ActionEvent actionEvent) {
+    @FXML
+    private void onSpeichernBtn(ActionEvent actionEvent) {
 
         try {
-            if(tierartField.getText().isEmpty() || nameField.getText().isEmpty() || alterField.getText().isEmpty() || farbeField.getText().isEmpty()) {
+            String tierArtFieldText = tierartField.getText();
+            String nameFieldText = nameField.getText();
+            String farbeFieldText = farbeField.getText();
+            int alterField = Integer.parseInt(this.alterField.getText());
+
+            if(tierArtFieldText.isEmpty() || nameFieldText.isEmpty() ||
+                    alterField == 0 || farbeFieldText.isEmpty()) {
                 errorLabel.setText(String.format("Üngultige Eingaben!%n" +
                         "Alter muss integer," +
-                        "%nandere Eingaben String," +
-                        "%ndarf nicht leer"));
+                        " alle Feldern sind mandatory"));
                 cleanUp();
-            }else {
-                Tier addedTier = new Tier(tierartField.getText(), nameField.getText(), Integer.parseInt(alterField.getText()), farbeField.getText());
-                TierManager.getInstance().getTiers().add(addedTier);
+            }
+            if (selectedTier == null ){
+                Tier addedTier = new Tier(
+                        tierArtFieldText,
+                        nameFieldText,
+                        alterField,
+                        farbeFieldText);
+                TierManager.getInstance().add(addedTier);
                 errorLabel.setText("Tier ist gespeichert!");
+                SceneManager.getInstance().switchScene("AnimalOverview.fxml");
+            }else{
+                if(!tierArtFieldText.equals(selectedTier.getTierart())) selectedTier.setTierart(tierArtFieldText);
+                if(!nameFieldText.equals(selectedTier.getName())) selectedTier.setName(nameFieldText);
+                if(alterField != selectedTier.getAlter()) selectedTier.setAlter(alterField);
+                if(!farbeFieldText.equals(selectedTier.getFarbe())) selectedTier.setFarbe(farbeFieldText);
+
                 SceneManager.getInstance().switchScene("AnimalOverview.fxml");
             }
         } catch (Exception e) {
@@ -65,6 +91,7 @@ public class AnimalDetailsController {
 
     private void cleanUp() {
         tierartField.setText("");
+
         nameField.setText("");
         alterField.setText("");
         farbeField.setText("");
@@ -74,14 +101,33 @@ public class AnimalDetailsController {
         this.selectedTier = selectedTier;
         if(selectedTier == null) return;
 
+        vermitteltBtn.setDisable(false);
+
         tierartField.setText(selectedTier.getTierart());
         nameField.setText(selectedTier.getName());
         alterField.setText(String.valueOf(selectedTier.getAlter()));
         farbeField.setText(selectedTier.getFarbe());
+        setDisableTextField(true);
+        speicherBtn.setDisable(true);
     }
 
-    public void onZurückBtn(ActionEvent actionEvent) {
+    private void setDisableTextField(boolean b) {
+        tierartField.setDisable(b);
+        farbeField.setDisable(b);
+        alterField.setDisable(b);
+        nameField.setDisable(b);
+    }
+
+    public void toAnimalOverviewPage(ActionEvent actionEvent) {
         SceneManager.getInstance().switchScene("AnimalOverview.fxml");
+    }
+
+    public void onEditBtn(ActionEvent actionEvent) {
+        if(selectedTier!=null){
+            setDisableTextField(false);
+            vermitteltBtn.setDisable(true);
+            speicherBtn.setDisable(false);
+        }
     }
     //endregion
 }

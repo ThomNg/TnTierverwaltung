@@ -3,8 +3,14 @@ package com.tng.tntierverwaltung.logic;
 
 import com.tng.tntierverwaltung.model.Tier;
 import com.tng.tntierverwaltung.test.TestData;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.util.Callback;
+
+import java.util.function.Predicate;
 
 public class TierManager {
     //region Konstanten
@@ -17,7 +23,18 @@ public class TierManager {
 
     //region Konstruktoren
     private TierManager() {
-        tiers = FXCollections.observableList(TestData.getTier());
+        // change list to observable list, but this doesnt recognizable if we change one of the attributes
+        // we want all the attributes changes is also observable (i.e if you change the age, color, etc)
+        // therefore we need to use the callback and then add the listener
+        tiers = FXCollections.observableList(TestData.getTier(), tier -> new Observable[]{
+          tier.tierartProperty(), tier.nameProperty(), tier.alterProperty(), tier.farbeProperty()
+        });
+        tiers.addListener(new ListChangeListener<Tier>() {
+            @Override
+            public void onChanged(Change<? extends Tier> change) {
+                System.out.println("Änderung: "+ change);
+            }
+        });
     }
     //endregion
 
@@ -31,6 +48,13 @@ public class TierManager {
             instance = new TierManager();
         }
         return instance;
+    }
+
+    public ObservableList<Tier> filterBy(String s){
+        return tiers.filtered(tier -> tier.getTierart().contains(s)
+                || tier.getName().contains(s)
+                || String.valueOf(tier.getAlter()).contains(s)
+                || tier.getFarbe().contains(s));
     }
 
     public ObservableList<Tier> getTiers(){return  tiers;}

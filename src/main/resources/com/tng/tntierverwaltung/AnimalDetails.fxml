@@ -12,7 +12,7 @@
             <Font size="18.0" />
          </font>
          <VBox.margin>
-            <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </VBox.margin>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -132,7 +132,7 @@
       </Label>
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
          <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onZurückBtn" text="Zurück">
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#toAnimalOverviewPage" text="Zurück">
                <font>
                   <Font size="14.0" />
                </font>
@@ -143,18 +143,29 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </Button>
-            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onVermitteltBtn" text="Vermittelt">
+            <Button fx:id="editBtn" mnemonicParsing="false" onAction="#onEditBtn" text="Edit">
                <font>
                   <Font size="14.0" />
                </font>
                <HBox.margin>
-                  <Insets bottom="10.0" left="300.0" right="10.0" top="10.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </HBox.margin>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </Button>
-            <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onSpeichernBtn" text="Speichern">
+            <Button fx:id="vermitteltBtn" alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onVermitteltBtn" text="Vermittelt">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="200.0" right="10.0" top="10.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </Button>
+            <Button fx:id="speicherBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onSpeichernBtn" text="Speichern">
                <font>
                   <Font size="14.0" />
                </font>
