@@ -6,12 +6,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class AnimalDetailsController {
     public Button vermitteltBtn;
     public Button editBtn;
     public Button speicherBtn;
+    public DatePicker datumField;
     //region Konstanten
     // endregion
 
@@ -59,6 +62,7 @@ public class AnimalDetailsController {
             String nameFieldText = nameField.getText();
             String farbeFieldText = farbeField.getText();
             int alterField = Integer.parseInt(this.alterField.getText());
+            LocalDate date = datumField.getValue();
 
             if(tierArtFieldText.isEmpty() || nameFieldText.isEmpty() ||
                     alterField == 0 || farbeFieldText.isEmpty()) {
@@ -72,7 +76,7 @@ public class AnimalDetailsController {
                         tierArtFieldText,
                         nameFieldText,
                         alterField,
-                        farbeFieldText);
+                        farbeFieldText, date);
                 TierManager.getInstance().add(addedTier);
                 errorLabel.setText("Tier ist gespeichert!");
                 SceneManager.getInstance().switchScene("AnimalOverview.fxml");
@@ -81,6 +85,7 @@ public class AnimalDetailsController {
                 if(!nameFieldText.equals(selectedTier.getName())) selectedTier.setName(nameFieldText);
                 if(alterField != selectedTier.getAlter()) selectedTier.setAlter(alterField);
                 if(!farbeFieldText.equals(selectedTier.getFarbe())) selectedTier.setFarbe(farbeFieldText);
+                if(date != null) selectedTier.setDate(date);
 
                 SceneManager.getInstance().switchScene("AnimalOverview.fxml");
             }
@@ -91,7 +96,6 @@ public class AnimalDetailsController {
 
     private void cleanUp() {
         tierartField.setText("");
-
         nameField.setText("");
         alterField.setText("");
         farbeField.setText("");
@@ -107,6 +111,7 @@ public class AnimalDetailsController {
         nameField.setText(selectedTier.getName());
         alterField.setText(String.valueOf(selectedTier.getAlter()));
         farbeField.setText(selectedTier.getFarbe());
+        datumField.setValue(selectedTier.getDate());
         setDisableTextField(true);
         speicherBtn.setDisable(true);
     }
@@ -116,6 +121,7 @@ public class AnimalDetailsController {
         farbeField.setDisable(b);
         alterField.setDisable(b);
         nameField.setDisable(b);
+        datumField.setDisable(b);
     }
 
     public void toAnimalOverviewPage(ActionEvent actionEvent) {
@@ -128,6 +134,9 @@ public class AnimalDetailsController {
             vermitteltBtn.setDisable(true);
             speicherBtn.setDisable(false);
         }
+    }
+
+    public void onDatumSelected(ActionEvent actionEvent) {
     }
     //endregion
 }

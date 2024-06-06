@@ -1,9 +1,8 @@
 package com.tng.tntierverwaltung.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+
+import java.time.LocalDate;
 
 public class Tier {
     //region Konstanten
@@ -14,14 +13,28 @@ public class Tier {
     private StringProperty name;
     private IntegerProperty alter;
     private StringProperty farbe;
+    private ObjectProperty<LocalDate> date;
     //endregion
 
+    public LocalDate getDate() {
+        return date.get();
+    }
+
+    public ObjectProperty<LocalDate> dateProperty() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date.set(date);
+    }
+
     //region Konstruktoren
-    public Tier(String tierart, String name, int alter, String farbe) {
+    public Tier(String tierart, String name, int alter, String farbe, LocalDate localDate) {
         this.tierart = new SimpleStringProperty(tierart);
         this.name = new SimpleStringProperty(name);
         this.alter = new SimpleIntegerProperty(alter);
         this.farbe = new SimpleStringProperty(farbe);
+        this.date = new SimpleObjectProperty<>(localDate);
     }
     //endregion
 
@@ -83,6 +96,7 @@ public class Tier {
                 ", name='" + name.get() + '\'' +
                 ", alter=" + alter.get() +
                 ", farbe='" + farbe.get() + '\'' +
+                ", date='" + date.get() +'\'' +
                 '}';
     }
    //endregion

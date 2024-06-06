@@ -6,6 +6,7 @@ import com.tng.tntierverwaltung.model.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -74,5 +75,10 @@ public class AnimalOverviewController{
     public void onSortFarbeBtn() {
         ObservableList<Tier> listTiers = TierManager.getInstance().getTiers();
         listTiers.sort(Comparator.comparing(o -> o.getFarbe().toLowerCase()));
+    }
+
+    public void onDateBtn(ActionEvent actionEvent) {
+        ObservableList<Tier> listTiers = TierManager.getInstance().getTiers();
+        listTiers.sort(Comparator.comparing(Tier::getDate));
     }
 }

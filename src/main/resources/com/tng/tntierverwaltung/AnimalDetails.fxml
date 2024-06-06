@@ -122,6 +122,29 @@
             </TextField>
          </children>
       </HBox>
+      <HBox layoutX="10.0" layoutY="293.0" prefHeight="72.0" prefWidth="800.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="239.0" text="Datum">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </Label>
+            <DatePicker fx:id="datumField" onAction="#onDatumSelected" prefHeight="45.0" prefWidth="349.0">
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </DatePicker>
+         </children>
+      </HBox>
       <Label fx:id="errorLabel" alignment="CENTER" layoutX="60.0" layoutY="60.0" prefHeight="145.0" prefWidth="700.0" textFill="#eb1919">
          <font>
             <Font size="18.0" />
