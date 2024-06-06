@@ -1,6 +1,8 @@
 package com.tng.tntierverwaltung.logic;
 
 
+import com.tng.tntierverwaltung.logic.db.DBManager;
+
 import com.tng.tntierverwaltung.model.Tier;
 import com.tng.tntierverwaltung.test.TestData;
 import javafx.beans.Observable;
@@ -26,27 +28,28 @@ public class TierManager {
         // change list to observable list, but this doesn't recognizable if we change one of the attributes
         // we want all the attributes changes is also observable (i.e if you change the age, color, etc)
         // therefore we need to use the callback and then add the listener
-        tiers = FXCollections.observableList(TestData.getTier(), tier -> new Observable[]{
+        tiers = FXCollections.observableList(DBManager.getInstance().fetchALL(), tier -> new Observable[]{
           tier.tierartProperty(), tier.nameProperty(), tier.alterProperty(), tier.farbeProperty(), tier.dateProperty(),
         });
 
-
-        tiers.addListener(new ListChangeListener<Tier>() {
-            @Override
-            public void onChanged(Change<? extends Tier> change) {
-                //System.out.println("Änderung: "+ change);
-                    while(change.next()){
-                        if(change.wasUpdated()) {
-                            System.out.println("Updated "+ change.wasUpdated());
-                        }
-                        else if(change.wasAdded()){
-                            System.out.println("added "+ change.getFrom());
-                        }else if(change.wasRemoved()){
-                            System.out.println("removed "+ change.getRemoved());
-                        }
+        tiers.addListener((ListChangeListener<Tier>) change -> {
+                while(change.next()){
+                    if(change.wasUpdated()) {
+                        System.out.println("Updated "+ change.wasUpdated());
+                        Tier tier = change.getList().get(change.getFrom());
+                        DBManager.getInstance().update(tier);
+                    }
+                    else if(change.wasAdded()){
+                        System.out.println("added "+ change.getFrom());
+                        Tier tier = change.getAddedSubList().getFirst();
+                        DBManager.getInstance().insert(tier);
+                    }else if(change.wasRemoved()){
+                        System.out.println("removed "+ change.getRemoved());
+                        Tier tier = change.getRemoved().getFirst();
+                        DBManager.getInstance().delete(tier);
                     }
                 }
-        });
+            });
     }
     //endregion
 

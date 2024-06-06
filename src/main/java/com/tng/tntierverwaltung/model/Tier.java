@@ -9,6 +9,7 @@ public class Tier {
     // endregion
 
     //region Attribute
+    private int id ;
     private StringProperty tierart;
     private StringProperty name;
     private IntegerProperty alter;
@@ -40,6 +41,14 @@ public class Tier {
 
     //region Methoden
 
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTierart() {
         return tierart.get();
@@ -92,6 +101,7 @@ public class Tier {
     @Override
     public String toString() {
         return "Tier{" +
+                "id='" +id+ '\'' +
                 "Tierart='" + tierart.get() + '\'' +
                 ", name='" + name.get() + '\'' +
                 ", alter=" + alter.get() +

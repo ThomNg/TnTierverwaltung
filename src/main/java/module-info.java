@@ -1,6 +1,8 @@
 module com.tng.tntierverwaltung {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
+    requires org.mariadb.jdbc;
 
 
     opens com.tng.tntierverwaltung to javafx.fxml;
